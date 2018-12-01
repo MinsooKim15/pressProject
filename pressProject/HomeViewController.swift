@@ -31,7 +31,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
                 date : "오늘",
                 company : "브리프일보",
                 image: "언덕",
-                url: "a.com")
+                url: "https://cdn-images-1.medium.com/fit/c/120/120/1*itqJYWWwTxoX625nJPukjA.jpeg")
             articleList.append(article)
         }
         return articleList
@@ -53,12 +53,11 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         return 1
     }
     
-
     
+    @IBOutlet weak var articleTableView: UITableView!
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        print("Row 개수 확인 함수도 실행되었슴다.")
         return articleList.count + 2
     }
     
@@ -75,7 +74,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             print("Cell Return함수도?")
             return cell
         }else if indexPath.row == lastRowIndex{
-            var cell = articleTableView.dequeueReusableCell(withIdentifier: "endCell", for: indexPath) as! LastTableViewCell
+            let cell = articleTableView.dequeueReusableCell(withIdentifier: "endCell", for: indexPath) as! LastTableViewCell
             return cell
         }else {
             let cell = articleTableView.dequeueReusableCell(withIdentifier: "shortContentCell", for: indexPath) as! ArticleTableViewCell
@@ -85,6 +84,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             cell.subtitle.text = theArticle.subTitle
             cell.date.text = theArticle.date
             cell.company.text = theArticle.company
+            cell.imageUrl = theArticle.url
             return cell
         }
         
@@ -101,11 +101,6 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             return 56
         }else {
             return 136
-        }
-    }
-    @IBOutlet weak var articleTableView: UITableView!{
-        didSet{
-            print("일단 set은 되어따")
         }
     }
 }
