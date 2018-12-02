@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="5cf-zk-ILT">
     <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -206,17 +206,16 @@
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="133.92857142857142"/>
         </scene>
-        <!--View Controller-->
+        <!--Web View Controller-->
         <scene sceneID="0H6-x8-tbf">
             <objects>
-                <viewController id="5cf-zk-ILT" sceneMemberID="viewController">
+                <viewController id="5cf-zk-ILT" customClass="WebViewController" customModule="pressProject" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="mFy-wP-y74">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <wkWebView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="06B-gF-5xS">
-                                <rect key="frame" x="0.0" y="94" width="414" height="756"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MAF-7Q-qgd">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -225,8 +224,21 @@
                             </wkWebView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="MAF-7Q-qgd" firstAttribute="top" secondItem="uYD-o1-SM3" secondAttribute="top" id="3YL-Yr-MwB"/>
+                            <constraint firstItem="uYD-o1-SM3" firstAttribute="bottom" secondItem="MAF-7Q-qgd" secondAttribute="bottom" id="45g-z5-se0"/>
+                            <constraint firstItem="uYD-o1-SM3" firstAttribute="trailing" secondItem="MAF-7Q-qgd" secondAttribute="trailing" id="943-Bu-Xya"/>
+                            <constraint firstItem="MAF-7Q-qgd" firstAttribute="leading" secondItem="uYD-o1-SM3" secondAttribute="leading" id="AIw-Lk-GZq"/>
+                            <constraint firstItem="MAF-7Q-qgd" firstAttribute="top" secondItem="uYD-o1-SM3" secondAttribute="top" id="Er0-v3-uxC"/>
+                            <constraint firstItem="uYD-o1-SM3" firstAttribute="bottom" secondItem="MAF-7Q-qgd" secondAttribute="bottom" id="Iog-Hr-hqM"/>
+                            <constraint firstItem="uYD-o1-SM3" firstAttribute="trailing" secondItem="MAF-7Q-qgd" secondAttribute="trailing" id="SUO-Hb-4fA"/>
+                            <constraint firstItem="MAF-7Q-qgd" firstAttribute="leading" secondItem="uYD-o1-SM3" secondAttribute="leading" id="wld-xv-yNz"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="uYD-o1-SM3"/>
                     </view>
+                    <connections>
+                        <outlet property="webView" destination="MAF-7Q-qgd" id="Wpr-ok-jG3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u6N-Rw-UbS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
