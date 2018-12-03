@@ -11,7 +11,7 @@ import WebKit
 
 class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate{
     
-    
+    var urlString : String? 
     @IBOutlet weak var webView: WKWebView!
     
     override func loadView() {
@@ -24,9 +24,11 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let url = URL(string: "http://www.naver.com")
-        let request = URLRequest(url: url!)
-        webView.load(request)
+        if let siteAddress = urlString{
+        let url = URL(string: siteAddress)
+            let request = URLRequest(url: url!)
+            webView.load(request)
+        }
     }
     
     override func didReceiveMemoryWarning() {

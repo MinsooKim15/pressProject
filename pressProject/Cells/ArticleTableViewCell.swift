@@ -14,12 +14,17 @@ class ArticleTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
+    
 
+    
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
+    
+    
     var imageUrl:String?{
         didSet{
             print("일단 URL을 받았는디..")
@@ -51,6 +56,13 @@ class ArticleTableViewCell: UITableViewCell {
             downloadPicTask.resume()
         }
     }
+    //temporary for the segueway test
+
+    
+    //MARK: 임시버튼(Cell 터치 추가 후 삭제 예정)
+    @IBOutlet weak var tempButtonToArticle: UIButton!
+    
+    var urlString : String?
     
     @IBOutlet weak var title: UILabel!
     
@@ -61,3 +73,4 @@ class ArticleTableViewCell: UITableViewCell {
     @IBOutlet weak var thumbnail: UIImageView!
     
 }
+

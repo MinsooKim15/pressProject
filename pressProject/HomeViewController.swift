@@ -9,6 +9,10 @@
 import UIKit
 
 class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+ 
+    
+
+    
 
     
     // MARK : Data Stuff - Temporary for local test
@@ -20,20 +24,31 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         var company : String
         var image : String
         var url : String
+        var siteUrl : String
     }
     private func makingDummyData(_ num:Int)->([Article]){
         var articleList = [Article]()
         var _ : Int?
-        for _ in 0 ..< num {
+//        for _ in 0 ..< num {
             let article = Article(
                 title: "용기가 공자는 천지는 것이다.",
                 subTitle : "언덕 어머니, 애기 까닭입니다.",
                 date : "오늘",
                 company : "브리프일보",
                 image: "언덕",
-                url: "https://cdn-images-1.medium.com/fit/c/120/120/1*itqJYWWwTxoX625nJPukjA.jpeg")
+                url: "https://cdn-images-1.medium.com/fit/c/120/120/1*itqJYWWwTxoX625nJPukjA.jpeg",
+                siteUrl: "http://www.daum.net")
             articleList.append(article)
-        }
+//        }
+        let article2 = Article(
+            title: "용기가 공자는 천지는 것이다.",
+            subTitle : "언덕 어머니, 애기 까닭입니다.",
+            date : "오늘",
+            company : "네이버",
+            image: "언덕",
+            url: "https://cdn-images-1.medium.com/fit/c/120/120/1*itqJYWWwTxoX625nJPukjA.jpeg",
+            siteUrl: "http://www.naver.com")
+        articleList.append(article2)
         return articleList
         
     }
@@ -80,15 +95,27 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             let cell = articleTableView.dequeueReusableCell(withIdentifier: "shortContentCell", for: indexPath) as! ArticleTableViewCell
             
             let theArticle = articleList[indexPath.row-1]
+            
             cell.title.text = theArticle.title
             cell.subtitle.text = theArticle.subTitle
             cell.date.text = theArticle.date
             cell.company.text = theArticle.company
             cell.imageUrl = theArticle.url
+            cell.urlString = theArticle.siteUrl
+            
+            cell.tempButtonToArticle.tag = indexPath.row - 1
+            cell.tempButtonToArticle.addTarget(self, action: #selector(HomeViewController.buttonTapped(_:)), for : .touchUpInside)
             return cell
         }
         
     }
+    var url: String?
+    
+    @objc func buttonTapped(_ sender: Any) {
+        self.performSegue(withIdentifier: "showArticle", sender: sender)
+        
+    }
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
@@ -101,6 +128,23 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             return 56
         }else {
             return 136
+        }
+    }
+    
+    //MARK: Segueway to the webview
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let identifier = segue.identifier {
+            if (identifier == "showArticle"){
+                if let wvc = segue.destination as? WebViewController{
+//                    let myIndexPath = self.articleTableView.indexPathForSelectedRow
+//                    let row = myIndexPath.row
+                    if let button:UIButton = sender as? UIButton{
+                        wvc.urlString = articleList[button.tag].siteUrl
+                        print(wvc.urlString)
+                    }
+                    
+                }
+            }
         }
     }
 }
