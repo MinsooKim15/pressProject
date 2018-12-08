@@ -16,6 +16,7 @@ class WebViewController: UIViewController, WKUIDelegate, WKNavigationDelegate{
     
     override func loadView() {
         super.loadView()
+        //경고창 믿지마. 없으면 Webview가 안 뜸.
         webView = WKWebView(frame: self.view.frame)
         webView.uiDelegate = self
         webView.navigationDelegate = self

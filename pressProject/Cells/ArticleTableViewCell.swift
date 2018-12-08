@@ -27,8 +27,6 @@ class ArticleTableViewCell: UITableViewCell {
     
     var imageUrl:String?{
         didSet{
-            print("일단 URL을 받았는디..")
-            print(imageUrl)
             let pictureURL = URL(string: imageUrl!)!
 //            do{
 //                let data = try Data(contentsOf:pictureURL)
@@ -59,8 +57,8 @@ class ArticleTableViewCell: UITableViewCell {
     //temporary for the segueway test
 
     
-    //MARK: 임시버튼(Cell 터치 추가 후 삭제 예정)
-    @IBOutlet weak var tempButtonToArticle: UIButton!
+    //MARK: 임시버튼(Cell 터치 추가 후 삭제 예정-우선 주석 처리함.)
+//    @IBOutlet weak var tempButtonToArticle: UIButton!
     
     var urlString : String?
     

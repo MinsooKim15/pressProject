@@ -20,6 +20,7 @@ class StartTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+
     //TODO: 이 밑에는 날짜에 따른 시간 표현이 들어가야 한다.
     @IBOutlet weak var currentTime: UILabel!
     

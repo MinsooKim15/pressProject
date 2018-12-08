@@ -10,10 +10,10 @@ import UIKit
 
 class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
  
-    
 
     
-
+    override func viewDidAppear(_ animated: Bool) {
+    }
     
     // MARK : Data Stuff - Temporary for local test
     var articleCount = 10
@@ -52,6 +52,92 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         return articleList
         
     }
+    var timeStartDictionary: [Int: String] =
+        [00 : "깊은 밤",
+         07 : "아침",
+         12 : "오후",
+         18 : "저녁"]
+
+    
+    func timeToString() -> (String){
+        let now = Date()
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "MM dd HH mm"
+        let dateString = formatter.string(from:now)
+        let dateStringList = dateString.split(separator: " ")
+        let dayString = dateStringList[1]
+        let day = String(Int(String(dayString))!)
+        let hourString = dateStringList[2]
+        print(hourString)
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        let hour = Int(hourString)!
+        var hourResult:String
+        switch hour{
+            case 0..<7:
+                hourResult = "깊은 밤"
+        case 7..<12:
+            hourResult = "아침"
+        case 12..<18:
+            hourResult = "오후"
+        case 18..<24:
+            hourResult = "저녁"
+        default :
+            hourResult = "오늘 하루"
+        }
+//        if hour > Array(timeStartDictionary.keys)[3]{
+//            print("저녁!.!.!")
+//            print(hour)
+//            print(Array(timeStartDictionary.keys)[3])
+//            hourResult = timeStartDictionary[Array(timeStartDictionary.keys)[3]]!
+//        }else if hour > Array(timeStartDictionary.keys)[2] {
+//            print("오후!.!.!")
+//            print(hour)
+//            print(Array(timeStartDictionary.keys)[2])
+//            hourResult = timeStartDictionary[Array(timeStartDictionary.keys)[2]]!
+//        }else if hour > Array(timeStartDictionary.keys)[1] {
+//            hourResult = timeStartDictionary[Array(timeStartDictionary.keys)[1]]!
+//            print("아침!.!.!")
+//            print(hour)
+//            print(Array(timeStartDictionary.keys)[1])
+//        }else{
+//            hourResult = timeStartDictionary[Array(timeStartDictionary.keys)[1]]!
+//            print("깊은 밤 !.!.!")
+//            print(hour)
+//            print(Array(timeStartDictionary.keys)[0])
+//            hourResult = timeStartDictionary[Array(timeStartDictionary.keys)[0]]!
+//        }
+        let result =  day+"일 "+hourResult
+        return result
+    }
+    
+    
+    
+    //서버 접속 테스트
+    func testNodeApi(){
+        
+        let apiUrl = URL(string: "http://localhost:3000/api")
+        let session = URLSession.shared
+        var request = URLRequest(url:apiUrl!)
+        request.httpMethod = "GET"
+        let task = session.dataTask(with: request as URLRequest, completionHandler:{data, reponse, error in
+            guard error == nil else {
+                return
+            }
+            guard let data = data else{
+                return
+            }
+            do{
+                if let json = try JSONSerialization.jsonObject(with:data, options: .mutableContainers) as? [String: Any]{
+                    print(json)
+                    print("************************************")
+                }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        })
+        task.resume()
+    }
     
     var articleList:[Article] = []
     override func viewDidLoad() {
@@ -60,6 +146,9 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         print("view는 로드 되었슴다.")
         articleTableView.delegate = self
         articleTableView.dataSource = self
+        //서버 접속 테스트
+        testNodeApi()
+        print("Test Node Api 호출 시작")
     }
     
     //MARK : TableView Stuff
@@ -67,7 +156,10 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+//
+//    func currentTimeToString() -> String{
+//
+//    }
     
     @IBOutlet weak var articleTableView: UITableView!
     
@@ -84,7 +176,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         if indexPath.row == 0 {
             
             let cell = articleTableView.dequeueReusableCell(withIdentifier: "startCell", for:indexPath ) as! StartTableViewCell
-            cell.currentTime.text = "안녕!"
+            cell.currentTime.text = timeToString()
             print(cell)
             print("Cell Return함수도?")
             return cell
@@ -102,20 +194,32 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             cell.company.text = theArticle.company
             cell.imageUrl = theArticle.url
             cell.urlString = theArticle.siteUrl
-            
-            cell.tempButtonToArticle.tag = indexPath.row - 1
-            cell.tempButtonToArticle.addTarget(self, action: #selector(HomeViewController.buttonTapped(_:)), for : .touchUpInside)
+            cell.title.tag = indexPath.row - 1
+            //MARK: 세그웨이 버튼 관련
+//            cell.tempButtonToArticle.tag = indexPath.row - 1
+//            cell.tempButtonToArticle.addTarget(self, action: #selector(HomeViewController.buttonTapped(_:)), for : .touchUpInside)
             return cell
         }
         
     }
-    var url: String?
-    
-    @objc func buttonTapped(_ sender: Any) {
-        self.performSegue(withIdentifier: "showArticle", sender: sender)
-        
+    var urlToSegue : String?
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let indexPath = tableView.indexPathForSelectedRow
+        if indexPath!.row != 0{
+            if let currentCell = tableView.cellForRow(at: indexPath!) as? ArticleTableViewCell{
+                self.urlToSegue = currentCell.urlString
+            }
+            
+            self.performSegue(withIdentifier: "showArticle", sender: self)
+        }
     }
     
+    
+    var url: String?
+    //MARK:세그웨이 버튼 관련 코드
+//    @objc func buttonTapped(_ sender: Any) {
+//        self.performSegue(withIdentifier: "showArticle", sender: sender)
+//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
@@ -139,10 +243,12 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 //                    let myIndexPath = self.articleTableView.indexPathForSelectedRow
 //                    let row = myIndexPath.row
                     if let button:UIButton = sender as? UIButton{
-                        wvc.urlString = articleList[button.tag].siteUrl
-                        print(wvc.urlString)
+                        wvc.urlString = articleList[button.tag].url
+                    }else if let label :UILabel = sender as? UILabel{
+                        wvc.urlString = articleList[label.tag].siteUrl
+                    }else if let hvc: HomeViewController = sender as? HomeViewController{
+                         wvc.urlString = hvc.urlToSegue
                     }
-                    
                 }
             }
         }
