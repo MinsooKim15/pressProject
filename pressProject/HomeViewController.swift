@@ -10,7 +10,7 @@ import UIKit
 
 class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
  
-
+    var serverURL:String = "http://localhost:3000/api"
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -25,6 +25,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     // MARK : Data Stuff - Temporary for local test
     var articleCount = 10
     struct Article {
+        var articleID : String
         var title : String
         var subTitle : String
         var date : String
@@ -32,33 +33,128 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         var image : String
         var url : String
         var siteUrl : String
-    }
-    private func makingDummyData(_ num:Int)->([Article]){
-        var articleList = [Article]()
-        var _ : Int?
-//        for _ in 0 ..< num {
-            let article = Article(
-                title: "용기가 공자는 천지는 것이다.",
-                subTitle : "언덕 어머니, 애기 까닭입니다.",
-                date : "오늘",
-                company : "브리프일보",
-                image: "언덕",
-                url: "https://cdn-images-1.medium.com/fit/c/120/120/1*itqJYWWwTxoX625nJPukjA.jpeg",
-                siteUrl: "http://www.daum.net")
-            articleList.append(article)
-//        }
-        let article2 = Article(
-            title: "용기가 공자는 천지는 것이다.",
-            subTitle : "언덕 어머니, 애기 까닭입니다.",
-            date : "오늘",
-            company : "네이버",
-            image: "언덕",
-            url: "https://cdn-images-1.medium.com/fit/c/120/120/1*itqJYWWwTxoX625nJPukjA.jpeg",
-            siteUrl: "http://www.naver.com")
-        articleList.append(article2)
-        return articleList
         
     }
+//    private func makingDummyData(_ num:Int)->([Article]){
+//        var articleList = [Article]()
+//        var _ : Int?
+////        for _ in 0 ..< num {
+//            let article = Article(
+//                title: "용기가 공자는 천지는 것이다.",
+//                subTitle : "언덕 어머니, 애기 까닭입니다.",
+//                date : "오늘",
+//                company : "브리프일보",
+//                image: "언덕",
+//                url: "https://cdn-images-1.medium.com/fit/c/120/120/1*itqJYWWwTxoX625nJPukjA.jpeg",
+//                siteUrl: "http://www.daum.net")
+//            articleList.append(article)
+////        }
+//        let article2 = Article(
+//            title: "용기가 공자는 천지는 것이다.",
+//            subTitle : "언덕 어머니, 애기 까닭입니다.",
+//            date : "오늘",
+//            company : "네이버",
+//            image: "언덕",
+//            url: "https://cdn-images-1.medium.com/fit/c/120/120/1*itqJYWWwTxoX625nJPukjA.jpeg",
+//            siteUrl: "http://www.naver.com")
+//        articleList.append(article2)
+//        return articleList
+//
+//    }
+    var articleList:[Article] = []{
+        didSet{
+            articleTableView.reloadData()
+            print("!!@#$%^&*()!@#$%^&*(")
+            print(articleList)
+        }
+    }
+    func findDuplicate(is item:[String:String],in list:[Article])-> (Bool){
+        var result:Bool
+        for compareItem in list{
+            if compareItem.articleID == item["articleID"]{
+                return true
+            }
+        }
+        return false
+    }
+    
+    func callNodeApi(from serverUrl: String){
+        
+        let apiUrl = URL(string: serverUrl)
+        let session = URLSession.shared
+        var request = URLRequest(url:apiUrl!)
+        request.httpMethod = "GET"
+        let task = session.dataTask(with: request as URLRequest, completionHandler:{data, reponse, error in
+            guard error == nil else {
+                return
+            }
+            guard let data = data else{
+                return
+            }
+            print("진행 중 ")
+            print(data)
+            do{
+                if let json = try
+                    JSONSerialization.jsonObject(with:data, options: .mutableContainers) as? [[String: String]]{
+                    for jsonItem in json{
+                        if !self.findDuplicate(is: jsonItem, in: self.articleList){
+                            let articleItem = Article(
+                                articleID: jsonItem["articleID"]!,
+                                title: jsonItem["title"]!,
+                                subTitle: jsonItem["subTitle"]!,
+                                date: jsonItem["date"]!,
+                                company: jsonItem["company"]!,
+                                image: jsonItem["image"]!,
+                                url: jsonItem["url"]!,
+                                siteUrl: jsonItem["siteUrl"]!)
+                            self.articleList.append(articleItem)
+                        }
+                    }
+                    
+                    print(self.articleList)
+                }else{
+                }
+            } catch let error {
+            }
+        })
+        task.resume()
+    }
+    
+    
+    
+//    //서버 접속 테스트
+//    func testNodeApi(){
+//
+//        let apiUrl = URL(string: "http://localhost:3000/api")
+//        let session = URLSession.shared
+//        var request = URLRequest(url:apiUrl!)
+//        request.httpMethod = "GET"
+//        let task = session.dataTask(with: request as URLRequest, completionHandler:{data, reponse, error in
+//            guard error == nil else {
+//                return
+//            }
+//            guard let data = data else{
+//                return
+//            }
+//            print("진행 중 ")
+//            print(data)
+//            do{
+//                if let json = try JSONSerialization.jsonObject(with:data, options: .mutableContainers) as? [[String: String]]{
+//                    print("왔어 일단은")
+//                    print(json)
+//                    print("************************************")
+//                }else{
+//                    print("파싱이 안 되는 것 같아!.!")
+//                }
+//            } catch let error {
+//                print("에러가 되었어 일단은?")
+//                print(error.localizedDescription)
+//            }
+//            print("일단끝?")
+//        })
+//        task.resume()
+//    }
+    
     var timeStartDictionary: [Int: String] =
         [00 : "깊은 밤",
          07 : "아침",
@@ -92,70 +188,19 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         default :
             hourResult = "오늘 하루"
         }
-//        if hour > Array(timeStartDictionary.keys)[3]{
-//            print("저녁!.!.!")
-//            print(hour)
-//            print(Array(timeStartDictionary.keys)[3])
-//            hourResult = timeStartDictionary[Array(timeStartDictionary.keys)[3]]!
-//        }else if hour > Array(timeStartDictionary.keys)[2] {
-//            print("오후!.!.!")
-//            print(hour)
-//            print(Array(timeStartDictionary.keys)[2])
-//            hourResult = timeStartDictionary[Array(timeStartDictionary.keys)[2]]!
-//        }else if hour > Array(timeStartDictionary.keys)[1] {
-//            hourResult = timeStartDictionary[Array(timeStartDictionary.keys)[1]]!
-//            print("아침!.!.!")
-//            print(hour)
-//            print(Array(timeStartDictionary.keys)[1])
-//        }else{
-//            hourResult = timeStartDictionary[Array(timeStartDictionary.keys)[1]]!
-//            print("깊은 밤 !.!.!")
-//            print(hour)
-//            print(Array(timeStartDictionary.keys)[0])
-//            hourResult = timeStartDictionary[Array(timeStartDictionary.keys)[0]]!
-//        }
         let result =  day+"일 "+hourResult
         return result
     }
-    
-    
-    
-    //서버 접속 테스트
-    func testNodeApi(){
-        
-        let apiUrl = URL(string: "http://localhost:3000/api")
-        let session = URLSession.shared
-        var request = URLRequest(url:apiUrl!)
-        request.httpMethod = "GET"
-        let task = session.dataTask(with: request as URLRequest, completionHandler:{data, reponse, error in
-            guard error == nil else {
-                return
-            }
-            guard let data = data else{
-                return
-            }
-            do{
-                if let json = try JSONSerialization.jsonObject(with:data, options: .mutableContainers) as? [String: Any]{
-                    print(json)
-                    print("************************************")
-                }
-            } catch let error {
-                print(error.localizedDescription)
-            }
-        })
-        task.resume()
+    override func viewWillAppear(_ animated: Bool) {
+        callNodeApi(from: serverURL)
+        print("Test Node Api 호출 시작")
     }
     
-    var articleList:[Article] = []
     override func viewDidLoad() {
         super.viewDidLoad()
-        articleList = makingDummyData(articleCount)
         print("view는 로드 되었슴다.")
         articleTableView.delegate = self
         articleTableView.dataSource = self
-        //서버 접속 테스트
-        testNodeApi()
-        print("Test Node Api 호출 시작")
     }
     
     //MARK : TableView Stuff
@@ -212,7 +257,7 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
     var urlToSegue : String?
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let indexPath = tableView.indexPathForSelectedRow
-        if indexPath!.row != 0{
+        if indexPath!.row != 0 && indexPath!.row != articleList.count + 1 {
             if let currentCell = tableView.cellForRow(at: indexPath!) as? ArticleTableViewCell{
                 self.urlToSegue = currentCell.urlString
             }
@@ -220,7 +265,6 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             self.performSegue(withIdentifier: "showArticle", sender: self)
         }
     }
-    
     
     var url: String?
     //MARK:세그웨이 버튼 관련 코드

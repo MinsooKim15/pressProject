@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="VKU-FU-XKZ">
-                                <rect key="frame" x="16" y="17" width="382" height="757"/>
+                                <rect key="frame" x="16" y="0.0" width="382" height="774"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" priority="750" constant="757" id="6eW-EY-cjv"/>
@@ -45,7 +45,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="725" text="브리핑" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NN1-xN-xZD">
                                                     <rect key="frame" x="118" y="0.0" width="69" height="56"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="69" id="X93-rL-6bg"/>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="69" id="X93-rL-6bg"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" name="AppleSDGothicNeo-Bold" family="Apple SD Gothic Neo" pointSize="24"/>
                                                     <nil key="textColor"/>
@@ -174,6 +174,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="VKU-FU-XKZ" secondAttribute="trailing" constant="16" id="3zP-8j-5Uy"/>
+                            <constraint firstItem="VKU-FU-XKZ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="kXk-s8-wSa"/>
                             <constraint firstItem="VKU-FU-XKZ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="pkm-GQ-OP2"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="VKU-FU-XKZ" secondAttribute="bottom" id="thZ-2a-nvJ"/>
                         </constraints>
