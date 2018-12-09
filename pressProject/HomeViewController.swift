@@ -13,6 +13,13 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
 
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        
+    }
+    override func viewDidLayoutSubviews() {
+    self.navigationController?.navigationBar.backgroundColor = .white
+        self.navigationController?.navigationBar.isTranslucent = false
     }
     
     // MARK : Data Stuff - Temporary for local test
